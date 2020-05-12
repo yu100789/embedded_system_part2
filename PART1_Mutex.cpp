@@ -20,6 +20,7 @@ using namespace std;
 Compiler: g++ -pthread PART1_Mutex.cpp -o PART1_Mutex.out
 Execute	: ./PART1_Mutex.out
 ******************************************************/
+pthread_mutex_t count_mutex= PTHREAD_MUTEX_INITIALIZER;
 float Share_Sum = 0;
 
 struct Thread_Data
@@ -160,10 +161,11 @@ void* Global_Multi_Matrix_Multiplication(void *args)
 	cout << "The thread " << Thread->Thread_ID << " PID : " << PID << " is on CPU" << Core << endl;	
 	
 	//cout << "Start :" << Thread->Start << "End :" << Thread->End << "Total_Size :" << Thread->Total_Size << endl; 
+	pthread_mutex_lock( &count_mutex );
 	for( int i = 0 ; i < Thread->Total_Size; i++){
 		for( int j = Thread->Start ; j < Thread->End; j++)
 		{
-			Share_Sum = 0;
+			Share_Sum = 0;			
 			Thread->Output_Matrix[i][j] = 0;
 			for( int k = 0 ; k < Thread->Total_Size; k++)
 			{
@@ -178,6 +180,7 @@ void* Global_Multi_Matrix_Multiplication(void *args)
 			}				
 		}
 	}
+	pthread_mutex_unlock( &count_mutex );
 }
 
 void Print_Thread_Data(Thread_Data Thread)
