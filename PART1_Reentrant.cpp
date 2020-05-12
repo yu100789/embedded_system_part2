@@ -20,7 +20,6 @@ using namespace std;
 Compiler: g++ -pthread PART1_Reentrant.cpp -o PART1_Reentrant.out
 Execute	: ./PART1_Reentrant.out
 ******************************************************/
-float Share_Sum = 0;
 
 struct Thread_Data
 {
@@ -153,6 +152,7 @@ void Single_Matrix_Multiplication(Thread_Data Thread)
 
 void* Global_Multi_Matrix_Multiplication(void *args)
 {
+	float Share_Sum = 0;
 	Thread_Data *Thread = (struct Thread_Data*) args;
 	int Core = sched_getcpu();
 	int PID = syscall(SYS_gettid);
